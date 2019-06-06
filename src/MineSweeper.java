@@ -229,6 +229,10 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
         }
     }
 
+    public void overrideBoard(String toString){
+        board = EncodedObject.constructBoard(toString);
+    }
+
     public static void main(String[] args) {
         JFrame window = new JFrame("Minesweeper");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
