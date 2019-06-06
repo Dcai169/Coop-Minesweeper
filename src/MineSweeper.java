@@ -242,7 +242,8 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
 //        System.out.println(SIZE*Settings.WIDTH);
 //        System.out.println(SIZE*Settings.HEIGHT);
 //        window.setSize(SIZE*Settings.WIDTH+16, SIZE*Settings.HEIGHT+39);
-        window.setSize(SIZE*Settings.WIDTH, SIZE*Settings.HEIGHT+22);
+
+//        window.setSize(SIZE*Settings.WIDTH, SIZE*Settings.HEIGHT+22);
 
         panel.setFocusable(true);
         panel.grabFocus();
@@ -250,7 +251,7 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
         window.add(panel);
         window.setVisible(true);
 //        window.setResizable(true); // false
-//        window.setSize(SIZE*Settings.WIDTH+6, SIZE*Settings.HEIGHT+29);
+        window.setSize(SIZE*Settings.WIDTH+6, SIZE*Settings.HEIGHT+29);
         window.setResizable(false);
     }
 }
