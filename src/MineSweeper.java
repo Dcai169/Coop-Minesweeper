@@ -1,8 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
-public class MineSweeper extends JPanel {
+public class MineSweeper extends JPanel implements ThreadCompleteListener{
 
     private UDPArrayList<Action> localActions;
     private boolean gameState;
@@ -10,18 +11,17 @@ public class MineSweeper extends JPanel {
     private int mX, mY;
     private int r, c;
     private Board board;
-    private UDPListener listener;
 
     public static final int SIZE = Settings.SIZE;
 
-    public MineSweeper(int width, int height, boolean isServer) {
+    public MineSweeper(int width, int height) {
         this.width = width;
         this.height = height;
         this.totalMines = Settings.TOTAL_MINES; //((width/SIZE)*(height/SIZE))/5;
         this.gameState = true;
         this.board = new Board(width, height);
-        this.listener = new UDPListener(Settings.ADDRESS, Settings.PORT);
-        this.localActions = new UDPArrayList<Action>(listener);
+        this.localActions = new UDPArrayList<Action>(Settings.LISTENER);
+        localActions.getListener().addListener(this);
         setupMouseListener();
         setupKeyboardListener();
     }
@@ -114,7 +114,7 @@ public class MineSweeper extends JPanel {
                         hideBoard();
                         localActions.add(new Action(r, c, "hide"));
                     } else if (key == 87) {
-                        board.setupBoard();
+                        board.generateBoard();
                         hideBoard();
                         localActions.add(new Action(r, c, "newGame"));
                     } else if (key == 32) {
@@ -124,14 +124,14 @@ public class MineSweeper extends JPanel {
                         lClick();
                         localActions.add(new Action(r, c, "lClick"));
                     } else if (key == 27) {
-                        System.exit(0);
                         localActions.add(new Action(r, c, "quit"));
+                        System.exit(0);
                     }
                 } else if (key == 27) {
                     System.exit(0);
                     localActions.add(new Action(r, c, "quit"));
                 } else {
-                    board.setupBoard();
+                    board.generateBoard();
                     hideBoard();
                     gameState = true;
                     localActions.add(new Action(r, c, "newGame"));
@@ -172,9 +172,6 @@ public class MineSweeper extends JPanel {
             gameState = false;
             revealBoard();
         }
-        Action a = new Action(r, c, "lClick");
-        localActions.add(a);
-        UDPTransmission transmission = new UDPTransmission(Settings.ADDRESS, Settings.PORT, a.toString());
     }
 
     public void rClick() {
@@ -204,12 +201,41 @@ public class MineSweeper extends JPanel {
         return totalMines == correctFlags;
     }
 
+    @Override
+    public void notifyOfThreadComplete(Thread thread) {
+        if (Settings.LISTENER.getData().contains("type")) {
+            Action receivedAction = Parser.constructAction(Settings.LISTENER.getData());
+            localActions.add(-localActions.size(), receivedAction);
+            executeAction(receivedAction);
+            if (gameState) {
+                localActions.getListener().doRun();
+            }
+        }
+    }
+
+    public void executeAction(Action action){
+        String actionType = action.getType();
+        if (actionType.equals("lClick")){
+            board.lClick(action.getR(), action.getC());
+        } else if (actionType.equals("rClick")){
+            board.rClick(action.getR(), action.getC());
+        } else if (actionType.equals("quit")){
+            System.exit(0);
+        } else if (actionType.equals("newGame")){
+            board.generateBoard();
+        } else if (actionType.equals("hide")){
+            hideBoard();
+        } else if (actionType.equals("reveal")){
+            revealBoard();
+        }
+    }
+
     public static void main(String[] args) {
         JFrame window = new JFrame("Minesweeper");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setBounds(0, 0, SIZE*Settings.WIDTH, SIZE*Settings.HEIGHT + 22); //(x, y, w, h) 22 due to title bar.
 
-        MineSweeper panel = new MineSweeper(SIZE*Settings.WIDTH, SIZE*Settings.HEIGHT, true);
+        MineSweeper panel = new MineSweeper(SIZE*Settings.WIDTH, SIZE*Settings.HEIGHT);
 //        System.out.println(SIZE*Settings.WIDTH);
 //        System.out.println(SIZE*Settings.HEIGHT);
 //        window.setSize(SIZE*Settings.WIDTH+16, SIZE*Settings.HEIGHT+39);
