@@ -21,7 +21,7 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
         this.localActions = new UDPArrayList<Action>(Settings.LISTENER);
 //        localActions.getListener().addListener(this);
         this.board = new Board(width, height);
-        localActions.getListener().doRun();
+        localActions.getListener().start();
         setupMouseListener();
         setupKeyboardListener();
     }
@@ -38,6 +38,7 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
         if (winDetect()) {
             drawWin(g2);
         }
+
 //        System.out.println(getWidth());
 //        System.out.println(getHeight());
 //        System.out.println();
