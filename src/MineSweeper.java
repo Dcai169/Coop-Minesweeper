@@ -19,8 +19,7 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
         this.totalMines = Settings.TOTAL_MINES; //((width/SIZE)*(height/SIZE))/5;
         this.gameState = true;
         this.localActions = new UDPArrayList<Action>(Settings.LISTENER);
-        localActions.getListener().addListener(this);
-        localActions.add(new Action(r, c, "start"));
+//        localActions.getListener().addListener(this);
         this.board = new Board(width, height);
         localActions.getListener().doRun();
         setupMouseListener();
@@ -205,13 +204,10 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
 
     @Override
     public void notifyOfThreadComplete(Thread thread) {
-        if (Settings.LISTENER.getData().contains("type")) {
-            Action receivedAction = Parser.constructAction(Settings.LISTENER.getData());
-            localActions.localAdd(receivedAction);
-            executeAction(receivedAction);
-            if (gameState) {
-                localActions.getListener().doRun();
-            }
+        String data = Settings.LISTENER.getData();
+        if (data.contains("Action")){
+            //TODO: pull apart packet & construct object
+
         }
     }
 

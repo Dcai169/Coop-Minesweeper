@@ -23,7 +23,7 @@ public class UDPListener extends NotifyingThread{
             while (data == null) {
                 socket.receive(packet);
                 data = new java.lang.String((packet.getData())).trim();
-                System.out.println("RECEIVE:"+data);
+//                System.out.println("RECEIVE:"+data);
             }
             return data;
         } catch (Exception e){
