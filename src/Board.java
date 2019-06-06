@@ -48,7 +48,8 @@ public class Board implements ThreadCompleteListener {
                 board[k][l].setNeighborMines(numNeighborMines(k, l));
             }
         }
-        //TODO: broadcast packets
+        UDPTransmission newBoardTX = new UDPTransmission(Settings.ADDRESS, Settings.PORT, EncodedObject.getPacket(Settings.NAME, this));
+        newBoardTX.start();
     }
 
     public Square[][] getBoard() {
