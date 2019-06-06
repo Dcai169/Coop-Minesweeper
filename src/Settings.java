@@ -8,5 +8,5 @@ public class Settings {
     public static final int PORT = 5005;
     public static UDPListener LISTENER = new UDPListener(INCOMING_ADDRESS, PORT);
     public static UDPListener VOID_LISTENER = new UDPListener("0.0.0.0", 0);
-    public static String NAME = "Foxtrot";
+    public static String NAME = "Uniform";
 }
