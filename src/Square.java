@@ -44,7 +44,7 @@ public class Square {
             }
         }
         //g2.setColor(Color.BLACK);
-        //g2.drawRect(c * size, r * size, size, size);
+        //g2.drawRect(c * Settings.SIZE, r * Settings.SIZE, Settings.SIZE, Settings.SIZE);
     }
 
 
@@ -52,22 +52,22 @@ public class Square {
     public void drawFlag(Graphics2D g2) {
         g2.setFont(FONT);
         g2.drawString("🚩",
-                c * size+size/4,
-                r*size+size/4*3);
+                c * Settings.SIZE+Settings.SIZE/4,
+                r*Settings.SIZE+Settings.SIZE/4*3);
     }
 
     public void drawBomb(Graphics2D g2) {
         g2.setFont(FONT);
         g2.drawString("💣",
-                c * size + size/4,
-                r * size+size/4*3);
+                c * Settings.SIZE + Settings.SIZE/4,
+                r * Settings.SIZE+Settings.SIZE/4*3);
     }
 
     public void drawCross(Graphics2D g2) {
         g2.setFont(FONT);
         g2.drawString("❌",
-                c * size+size/4,
-                r*size+size/4*3);
+                c * Settings.SIZE+Settings.SIZE/4,
+                r*Settings.SIZE+Settings.SIZE/4*3);
     }
 
     public void drawNeighbors(Graphics2D g2){
@@ -94,18 +94,18 @@ public class Square {
             g2.setFont(FONT);
             g2.drawString(
                     Integer.toString(neighborMines),
-                    c * size + size/13*6,
-                    r * size + size/7*5
+                    c * Settings.SIZE + Settings.SIZE/13*6,
+                    r * Settings.SIZE + Settings.SIZE/7*5
             );
         }
     }
 
     public void drawTile(Graphics2D g2){
-        int[] topTriX = {c * size, (c+1) * size, c * size};
-        int[] topTriY = {r * size, r * size, (r+1) * size};
+        int[] topTriX = {c * Settings.SIZE, (c+1) * Settings.SIZE, c * Settings.SIZE};
+        int[] topTriY = {r * Settings.SIZE, r * Settings.SIZE, (r+1) * Settings.SIZE};
 
-        int[] bottomTriX = {(c+1) * size, (c+1) * size, c * size};
-        int[] bottomTriY = {r * size, (r+1) * size, (r+1) * size};
+        int[] bottomTriX = {(c+1) * Settings.SIZE, (c+1) * Settings.SIZE, c * Settings.SIZE};
+        int[] bottomTriY = {r * Settings.SIZE, (r+1) * Settings.SIZE, (r+1) * Settings.SIZE};
 
         Polygon topTri = new Polygon(topTriX, topTriY, 3);
         Polygon bottomTri = new Polygon(bottomTriX, bottomTriY, 3);
@@ -118,20 +118,20 @@ public class Square {
             g2.setColor(LIT);
             g2.fillPolygon(bottomTri);
             g2.setColor(Color.GRAY);
-            g2.fillRect(c * size+size/indent,
-                    r * size+size/indent,
-                    size-size/(indent/2),
-                    size-size/(indent/2));
+            g2.fillRect(c * Settings.SIZE+Settings.SIZE/indent,
+                    r * Settings.SIZE+Settings.SIZE/indent,
+                    Settings.SIZE-Settings.SIZE/(indent/2),
+                    Settings.SIZE-Settings.SIZE/(indent/2));
         } else {
             g2.setColor(LIT);
             g2.fillPolygon(topTri);
             g2.setColor(SHADOW);
             g2.fillPolygon(bottomTri);
             g2.setColor(Color.LIGHT_GRAY);
-            g2.fillRect(c * size+size/indent,
-                    r * size+size/indent,
-                    size-size/(indent/2),
-                    size-size/(indent/2));
+            g2.fillRect(c * Settings.SIZE+Settings.SIZE/indent,
+                    r * Settings.SIZE+Settings.SIZE/indent,
+                    Settings.SIZE-Settings.SIZE/(indent/2),
+                    Settings.SIZE-Settings.SIZE/(indent/2));
         }
     }
 

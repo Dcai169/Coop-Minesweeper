@@ -1,16 +1,16 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 
 public class MineSweeper extends JPanel {
 
-    private ArrayList<Action> localActions;
+    private UDPArrayList<Action> localActions;
     private boolean gameState;
     private int width, height, totalMines;
     private int mX, mY;
     private int r, c;
     private Board board;
+    private UDPListener listener;
 
     public static final int SIZE = Settings.SIZE;
 
@@ -20,8 +20,8 @@ public class MineSweeper extends JPanel {
         this.totalMines = Settings.TOTAL_MINES; //((width/SIZE)*(height/SIZE))/5;
         this.gameState = true;
         this.board = new Board(width, height);
-        this.localActions = new ArrayList<Action>();
-        setSize(width, height);
+        this.listener = new UDPListener(Settings.ADDRESS, Settings.PORT);
+        this.localActions = new UDPArrayList<Action>(listener);
         setupMouseListener();
         setupKeyboardListener();
     }
@@ -37,6 +37,9 @@ public class MineSweeper extends JPanel {
         if (winDetect()) {
             drawWin(g2);
         }
+//        System.out.println(getWidth());
+//        System.out.println(getHeight());
+//        System.out.println();
     }
 
     public void setupMouseListener() {
@@ -202,20 +205,23 @@ public class MineSweeper extends JPanel {
     }
 
     public static void main(String[] args) {
-        int width = Settings.WIDTH;
-        int height = Settings.HEIGHT;
-
         JFrame window = new JFrame("Minesweeper");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setBounds(0, 0, SIZE*width, SIZE*height + 22); //(x, y, w, h) 22 due to title bar.
+        window.setBounds(0, 0, SIZE*Settings.WIDTH, SIZE*Settings.HEIGHT + 22); //(x, y, w, h) 22 due to title bar.
 
-        MineSweeper panel = new MineSweeper(SIZE*width, SIZE*height, true);
+        MineSweeper panel = new MineSweeper(SIZE*Settings.WIDTH, SIZE*Settings.HEIGHT, true);
+//        System.out.println(SIZE*Settings.WIDTH);
+//        System.out.println(SIZE*Settings.HEIGHT);
+//        window.setSize(SIZE*Settings.WIDTH+16, SIZE*Settings.HEIGHT+39);
+//        window.setSize(SIZE*Settings.WIDTH, SIZE*Settings.HEIGHT);
 
         panel.setFocusable(true);
         panel.grabFocus();
 
         window.add(panel);
         window.setVisible(true);
+//        window.setResizable(true); // false
+        window.setSize(SIZE*Settings.WIDTH+6, SIZE*Settings.HEIGHT+29);
         window.setResizable(false);
     }
 }
