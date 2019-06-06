@@ -68,4 +68,37 @@ public class Parser {
         }
         return parsedList;
     }
+
+    public static UDPArrayList<Mine> constructMineList(String toString){
+        ArrayList<String> encodedMines = contructList(toString);
+        UDPArrayList<Mine> mines = new UDPArrayList<Mine>(Settings.VOID_LISTENER);
+        for (String encodedMine : encodedMines) {
+            mines.add(constructMine(encodedMine));
+        }
+        return mines;
+    }
+
+    public static Board constructBoard(String toString){
+        int width = -1;
+        int height = -1;
+        UDPArrayList<Mine> mines = null;
+        while (toString.contains(":") && toString.contains(";")){
+            String key = toString.substring(0, toString.indexOf(":"));
+            String value = toString.substring(toString.indexOf(":")+1, toString.indexOf(";"));
+            toString = toString.substring(toString.indexOf(";")+1);
+            if ("width".equals(key)) {
+                width = Integer.parseInt(value);
+                break;
+            } else if ("height".equals(key)) {
+                height = Integer.parseInt(value);
+                break;
+            } else if ("mine".equals(key)){
+                mines = constructMineList(value);
+                break;
+            } else {
+                break;
+            }
+        }
+        return new Board(width, height, mines);
+    }
 }
