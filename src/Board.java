@@ -38,7 +38,7 @@ public class Board implements ThreadCompleteListener {
                 Mine mine = new Mine(randR, randC);
                 board[randR][randC] = mine;
                 board[randR][randC].setMine(true);
-                mines.add(mine);
+                mines.localAdd(mine);  // WHY DOESNT THIS WORK????
                 minesPlanted++;
             }
         }
@@ -129,14 +129,14 @@ public class Board implements ThreadCompleteListener {
 
     @Override
     public void notifyOfThreadComplete(Thread thread) {
-        if (Settings.LISTENER.getData().contains("mines")) {
-            Board board = Parser.constructBoard(Settings.LISTENER.getData());
-            mines.clear();
-            for (Mine mine : board.getMines()) {
-                mines.localAdd(mine);
-            }
-            setBoardDimensions(board.getHeight(), board.getWidth());
-        }
+//        if (Settings.LISTENER.getData().contains("mines")) {
+//            Board board = EncodedObject.constructBoard(Settings.LISTENER.getData());
+//            mines.clear();
+//            for (Mine mine : board.getMines()) {
+//                mines.localAdd(mine);
+//            }
+//            setBoardDimensions(board.getHeight(), board.getWidth());
+//        }
     }
 
     public void setBoardDimensions(int r, int c){

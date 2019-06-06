@@ -50,5 +50,10 @@ public class TestMain {
 //        }
 //        System.out.println(parsedList);
 
+//        System.out.println(EncodedObject.getHeaderString("Foxtrot", new Mine(5, 3)));
+//        System.out.println(EncodedObject.getHeaderString("Foxtrot", ""));
+        String data = EncodedObject.getPacket("Foxtrot", new Mine(5, 3));
+        System.out.println(data);
+        System.out.println();
     }
 }
