@@ -1,20 +1,27 @@
 import java.util.ArrayList;
 
-public class Board {
+public class Board implements ThreadCompleteListener {
     private int width, height;
     private Square[][] board;
-    private ArrayList<Mine> mines;
+    private UDPArrayList<Mine> mines;
     public static final int SIZE = Settings.SIZE;
     public static final int TOTAL_MINES = Settings.TOTAL_MINES;
 
     public Board(int width, int height) {
         this.width = width;
         this.height = height;
-        this.mines = new ArrayList<Mine>();
-        setupBoard();
+        this.mines = new UDPArrayList<Mine>(Settings.LISTENER);
+        this.mines.getListener().addListener(this);
+        generateBoard();
     }
 
-    public void setupBoard() {
+    public Board(int width, int height, UDPArrayList<Mine> mines) {
+        this.width = width;
+        this.height = height;
+        this.mines = mines;
+    }
+
+    public void generateBoard() {
         int minesPlanted = 0;
         board = new Square[height/SIZE][width/SIZE];
         for (int i = 0; i < board.length; i++) {
@@ -120,7 +127,23 @@ public class Board {
         return neighborMines;
     }
 
-//    public int numNeighborFlags(Square[][] board){
+    @Override
+    public void notifyOfThreadComplete(Thread thread) {
+        if (Settings.LISTENER.getData().contains("mines")) {
+            Board board = Parser.constructBoard(Settings.LISTENER.getData());
+            mines.clear();
+            for (Mine mine : board.getMines()) {
+                ((ArrayList) mines).add(mine);
+            }
+            setBoardDimensions(board.getHeight(), board.getWidth());
+        }
+    }
+
+    public void setBoardDimensions(int r, int c){
+        board = new Square[r][c];
+    }
+
+    //    public int numNeighborFlags(Square[][] board){
 //        int neighborFlags = 0;
 //        for (int i = -1; i < 2; i++) {
 //            for (int j = -1; j < 2; j++) {
@@ -136,4 +159,12 @@ public class Board {
 //        }
 //        return neighborFlags;
 //    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
 }
