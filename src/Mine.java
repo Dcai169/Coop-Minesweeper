@@ -1,10 +1,14 @@
 public class Mine extends Square {
 
-    public Mine(int row, int col){
+    private int row, col;
+
+    public Mine(int row, int col) {
         super(row, col);
+        this.row = row;
+        this.col = col;
     }
 
-    public Mine(String toString){
-        super(Parser.constructMine(toString).getR(), Parser.constructMine(toString).getC());
+    public String toString(){
+        return String.format("r:%d;c:%d;", row, col);
     }
 }

@@ -9,12 +9,6 @@ public class Action {
         this.type = type;
     }
 
-    public Action(String toString){
-        this.r = Parser.constructAction(toString).getR();
-        this.c = Parser.constructAction(toString).getC();
-        this.type = Parser.constructAction(toString).getType();
-    }
-
     public int getR() {
         return r;
     }

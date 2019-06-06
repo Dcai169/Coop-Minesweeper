@@ -174,8 +174,4 @@ public class Square {
     public int getC() {
         return c;
     }
-
-    public String toString(){
-        return String.format("r:%d;c:%d;isMine:%s;", r, c, isMine);
-    }
 }
