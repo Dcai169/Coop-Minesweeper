@@ -22,6 +22,7 @@ public class Board implements ThreadCompleteListener {
     }
 
     public void generateBoard() {
+        mines.clear();
         int minesPlanted = 0;
         board = new Square[height/SIZE][width/SIZE];
         for (int i = 0; i < board.length; i++) {
