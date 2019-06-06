@@ -11,7 +11,7 @@ public class UDPArrayList<E> extends ArrayList<E> {
 
     @Override
     public boolean add(E data){
-        UDPTransmission tx = new UDPTransmission(Settings.ADDRESS, Settings.PORT, data.toString());
+        UDPTransmission tx = new UDPTransmission(Settings.ADDRESS, Settings.PORT, EncodedObject.getPacket(Settings.NAME, data));
         tx.doRun();
         return super.add(data);
     }
@@ -27,8 +27,8 @@ public class UDPArrayList<E> extends ArrayList<E> {
 //        }
 //    }
 
-    public boolean localAdd(E data){
-        return super.add(data);
+    public void localAdd(E data){
+        super.add(data);
     }
 
     public UDPListener getListener() {
