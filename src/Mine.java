@@ -9,6 +9,6 @@ public class Mine extends Square {
     }
 
     public String toString(){
-        return String.format("r:%d;c:%d;", row, col);
+        return String.format("r$%d#c$%d#", row, col);
     }
 }

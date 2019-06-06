@@ -46,10 +46,10 @@ public class EncodedObject {
     public static Mine constructMine(String toString){
         int r = -1;
         int c = -1;
-        while (toString.contains(":") && toString.contains(";")){
-            String key = toString.substring(0, toString.indexOf(":"));
-            String value = toString.substring(toString.indexOf(":")+1, toString.indexOf(";"));
-            toString = toString.substring(toString.indexOf(";")+1);
+        while (toString.contains("$") && toString.contains("#")){
+            String key = toString.substring(0, toString.indexOf("$"));
+            String value = toString.substring(toString.indexOf("$")+1, toString.indexOf("#"));
+            toString = toString.substring(toString.indexOf("#")+1);
             if ("r".equals(key)) {
                 r = Integer.parseInt(value);
                 break;
