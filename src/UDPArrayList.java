@@ -16,15 +16,19 @@ public class UDPArrayList<E> extends ArrayList<E> {
         return super.add(data);
     }
 
-    @Override
-    public void add(int i, E data){
-        if (i >= 0){
-            UDPTransmission tx = new UDPTransmission(Settings.ADDRESS, Settings.PORT, data.toString());
-            tx.doRun();
-            super.add(i, data);
-        } else {
-            super.add(-i,data);
-        }
+//    @Override
+//    public void add(int i, E data){
+//        if (i >= 0){
+//            UDPTransmission tx = new UDPTransmission(Settings.ADDRESS, Settings.PORT, data.toString());
+//            tx.doRun();
+//            super.add(i, data);
+//        } else {
+//            super.add(-i,data);
+//        }
+//    }
+
+    public boolean localAdd(E data){
+        return super.add(data);
     }
 
     public UDPListener getListener() {

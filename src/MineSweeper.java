@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 
 public class MineSweeper extends JPanel implements ThreadCompleteListener{
 
@@ -19,13 +18,16 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
         this.height = height;
         this.totalMines = Settings.TOTAL_MINES; //((width/SIZE)*(height/SIZE))/5;
         this.gameState = true;
-        this.board = new Board(width, height);
         this.localActions = new UDPArrayList<Action>(Settings.LISTENER);
         localActions.getListener().addListener(this);
+        localActions.add(new Action(r, c, "start"));
+        this.board = new Board(width, height);
+        localActions.getListener().doRun();
         setupMouseListener();
         setupKeyboardListener();
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
 
@@ -109,32 +111,28 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
                 if (gameState) {
                     if (key == 81) {
                         revealBoard();
-                        localActions.add(new Action(r, c, "reveal"));
                     } else if (key == 69) {
                         hideBoard();
-                        localActions.add(new Action(r, c, "hide"));
                     } else if (key == 87) {
+                        localActions.add(new Action(r, c, "newGame"));
                         board.generateBoard();
                         hideBoard();
-                        localActions.add(new Action(r, c, "newGame"));
                     } else if (key == 32) {
                         rClick();
-                        localActions.add(new Action(r, c, "rClick"));
                     } else if (key == 16) {
                         lClick();
-                        localActions.add(new Action(r, c, "lClick"));
                     } else if (key == 27) {
                         localActions.add(new Action(r, c, "quit"));
                         System.exit(0);
                     }
                 } else if (key == 27) {
-                    System.exit(0);
                     localActions.add(new Action(r, c, "quit"));
+                    System.exit(0);
                 } else {
+                    localActions.add(new Action(r, c, "newGame"));
                     board.generateBoard();
                     hideBoard();
                     gameState = true;
-                    localActions.add(new Action(r, c, "newGame"));
                 }
                 repaint();
             }
@@ -162,9 +160,11 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
                 board.getBoard()[i][j].setRevealed(true);
             }
         }
+        localActions.add(new Action(r, c, "reveal"));
     }
 
     public void lClick() {
+        localActions.add(new Action(r, c, "lClick"));
         if (!board.getBoard()[r][c].isFlagged()) {
             board.lClick(r, c);
         }
@@ -176,6 +176,7 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
 
     public void rClick() {
         board.rClick(r, c);
+        localActions.add(new Action(r, c, "rClick"));
     }
 
     public void hideBoard() {
@@ -186,6 +187,7 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
             }
         }
         gameState = true;
+        localActions.add(new Action(r, c, "hide"));
     }
 
     public boolean winDetect(){
@@ -205,7 +207,7 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
     public void notifyOfThreadComplete(Thread thread) {
         if (Settings.LISTENER.getData().contains("type")) {
             Action receivedAction = Parser.constructAction(Settings.LISTENER.getData());
-            localActions.add(-localActions.size(), receivedAction);
+            localActions.localAdd(receivedAction);
             executeAction(receivedAction);
             if (gameState) {
                 localActions.getListener().doRun();
@@ -239,7 +241,7 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
 //        System.out.println(SIZE*Settings.WIDTH);
 //        System.out.println(SIZE*Settings.HEIGHT);
 //        window.setSize(SIZE*Settings.WIDTH+16, SIZE*Settings.HEIGHT+39);
-//        window.setSize(SIZE*Settings.WIDTH, SIZE*Settings.HEIGHT);
+        window.setSize(SIZE*Settings.WIDTH, SIZE*Settings.HEIGHT+22);
 
         panel.setFocusable(true);
         panel.grabFocus();
@@ -247,7 +249,7 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
         window.add(panel);
         window.setVisible(true);
 //        window.setResizable(true); // false
-        window.setSize(SIZE*Settings.WIDTH+6, SIZE*Settings.HEIGHT+29);
+//        window.setSize(SIZE*Settings.WIDTH+6, SIZE*Settings.HEIGHT+29);
         window.setResizable(false);
     }
 }
