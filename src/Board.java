@@ -32,13 +32,13 @@ public class Board implements ThreadCompleteListener {
 
         while (minesPlanted <= TOTAL_MINES-1){
             int random = (int)(Math.random() * 100);
-            int randR = (int)(Math.random() * (height/SIZE));
-            int randC = (int)(Math.random() * (width/SIZE));
             if (random > 90 && TOTAL_MINES >= minesPlanted) {
+                int randR = (int)(Math.random() * (height/SIZE));
+                int randC = (int)(Math.random() * (width/SIZE));
                 Mine mine = new Mine(randR, randC);
                 board[randR][randC] = mine;
                 board[randR][randC].setMine(true);
-                mines.localAdd(mine);  // WHY DOESNT THIS WORK????
+                mines.localAdd(mine);
                 minesPlanted++;
             }
         }
@@ -48,6 +48,7 @@ public class Board implements ThreadCompleteListener {
                 board[k][l].setNeighborMines(numNeighborMines(k, l));
             }
         }
+        //TODO: broadcast packets
     }
 
     public Square[][] getBoard() {
