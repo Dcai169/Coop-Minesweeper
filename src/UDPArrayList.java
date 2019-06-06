@@ -11,21 +11,10 @@ public class UDPArrayList<E> extends ArrayList<E> {
 
     @Override
     public boolean add(E data){
-        UDPTransmission tx = new UDPTransmission(Settings.ADDRESS, Settings.PORT, EncodedObject.getPacket(Settings.NAME, data));
+        UDPTransmission tx = new UDPTransmission(Settings.TARGET_ADDRESS, Settings.PORT, EncodedObject.getPacket(Settings.NAME, data));
         tx.doRun();
         return super.add(data);
     }
-
-//    @Override
-//    public void add(int i, E data){
-//        if (i >= 0){
-//            UDPTransmission tx = new UDPTransmission(Settings.ADDRESS, Settings.PORT, data.toString());
-//            tx.doRun();
-//            super.add(i, data);
-//        } else {
-//            super.add(-i,data);
-//        }
-//    }
 
     public void localAdd(E data){
         super.add(data);

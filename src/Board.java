@@ -48,7 +48,7 @@ public class Board implements ThreadCompleteListener {
                 board[k][l].setNeighborMines(numNeighborMines(k, l));
             }
         }
-        UDPTransmission newBoardTX = new UDPTransmission(Settings.ADDRESS, Settings.PORT, EncodedObject.getPacket(Settings.NAME, this));
+        UDPTransmission newBoardTX = new UDPTransmission(Settings.TARGET_ADDRESS, Settings.PORT, EncodedObject.getPacket(Settings.NAME, this));
         newBoardTX.start();
     }
 
