@@ -46,18 +46,16 @@ public class EncodedObject {
     public static Mine constructMine(String toString){
         int r = -1;
         int c = -1;
-        while (toString.contains("$") && toString.contains("#")){
-            String key = toString.substring(0, toString.indexOf("$"));
-            String value = toString.substring(toString.indexOf("$")+1, toString.indexOf("#"));
-            toString = toString.substring(toString.indexOf("#")+1);
+        while (toString.contains("{") && toString.contains("}")){
+            String key = toString.substring(0, toString.indexOf("{"));
+            String value = toString.substring(toString.indexOf("{")+1, toString.indexOf("}"));
+            toString = toString.substring(toString.indexOf("}")+1);
             if ("r".equals(key)) {
                 r = Integer.parseInt(value);
-                break;
             } else if ("c".equals(key)) {
                 c = Integer.parseInt(value);
-                break;
             } else {
-                break;
+                System.out.println("Unrecognized key: "+key);
             }
         }
         //TODO: Add check if r, c is -1
@@ -90,7 +88,7 @@ public class EncodedObject {
         ArrayList<String> encodedMines = contructList(toString);
         UDPArrayList<Mine> mines = new UDPArrayList<Mine>(Settings.VOID_LISTENER);
         for (String encodedMine : encodedMines) {
-            mines.add(constructMine(encodedMine));
+            mines.localAdd(constructMine(encodedMine));
         }
         return mines;
     }
@@ -105,15 +103,12 @@ public class EncodedObject {
             toString = toString.substring(toString.indexOf(";")+1);
             if ("width".equals(key)) {
                 width = Integer.parseInt(value);
-                break;
             } else if ("height".equals(key)) {
                 height = Integer.parseInt(value);
-                break;
-            } else if ("mine".equals(key)){
+            } else if ("mines".equals(key)){
                 mines = constructMineList(value);
-                break;
             } else {
-                break;
+                System.out.println("Unrecognized key: "+key);
             }
         }
         return new Board(width, height, mines);
@@ -151,12 +146,10 @@ public class EncodedObject {
             header = header.substring(header.indexOf(";")+1);
             if ("origin".equals(key)) {
                 origin = value;
-                break;
             } else if ("class".equals(key)) {
                 className = value;
-                break;
             } else {
-                break;
+                System.out.println("Unrecognized key: "+key);
             }
         }
 
