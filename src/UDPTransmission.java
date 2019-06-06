@@ -16,6 +16,7 @@ public class UDPTransmission extends NotifyingThread {
 
     public void serve(){
         try {
+            System.out.println("SEND: "+data);
             byte[] buffer = data.getBytes();
             DatagramSocket socket = new DatagramSocket();
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(ip_address), ip_port);

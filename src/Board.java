@@ -133,7 +133,7 @@ public class Board implements ThreadCompleteListener {
             Board board = Parser.constructBoard(Settings.LISTENER.getData());
             mines.clear();
             for (Mine mine : board.getMines()) {
-                ((ArrayList) mines).add(mine);
+                mines.localAdd(mine);
             }
             setBoardDimensions(board.getHeight(), board.getWidth());
         }
