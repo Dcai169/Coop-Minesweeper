@@ -7,7 +7,7 @@ public class Square {
     private int r, c, size;
     private static final Color LIT = new Color(150,150,150);
     private static final Color SHADOW = new Color(100, 100, 100);
-    private static final Font FONT = new Font("Arial", Font.PLAIN,Settings.SIZE/2);
+    public static final Font FONT = new Font("Arial", Font.PLAIN,Settings.SIZE/2);
 
     public Square(int r, int c) {
         this.isMine = false;

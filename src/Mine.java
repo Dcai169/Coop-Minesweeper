@@ -6,6 +6,7 @@ public class Mine extends Square {
         super(row, col);
         this.row = row;
         this.col = col;
+        this.setMine(true);
     }
 
     public String toString(){

@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Board implements ThreadCompleteListener {
@@ -189,5 +190,10 @@ public class Board implements ThreadCompleteListener {
 
     public int getHeight() {
         return height;
+    }
+
+    public void loadFont(Graphics2D g2){
+        g2.setFont(Square.FONT);
+        g2.drawString(" ", 0, 0);
     }
 }
