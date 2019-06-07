@@ -213,17 +213,12 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
     public void notifyOfThreadComplete(Thread thread) {
         String data = Settings.LISTENER.getData();
 
-//        System.out.println("====[Minesweeper.notifyOfThreadComplete]====");
-//        System.out.println(EncodedObject.getHeader(data));
-//        System.out.println(EncodedObject.getBody(data));
-//        System.out.println();
+        System.out.println("====[Minesweeper.notifyOfThreadComplete]====");
+        System.out.println(EncodedObject.getHeader(data));
+        System.out.println(EncodedObject.getBody(data));
+        System.out.println();
 
         if (data.contains("Action")){
-            //TODO: pull apart packet & construct object
-
-            System.out.println("====[Minesweeper.notifyOfThreadComplete]====");
-            System.out.println(EncodedObject.constructAction(EncodedObject.getBody(data)));
-
             executeAction(EncodedObject.constructAction(EncodedObject.getBody(data)));
         } else if (data.contains("Board")){
             setBoardFromString(EncodedObject.getBody(data));
