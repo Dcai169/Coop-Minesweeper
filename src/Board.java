@@ -192,7 +192,7 @@ public class Board implements ThreadCompleteListener {
         return height;
     }
 
-    public void loadFont(Graphics2D g2){
+    public static void LOAD_FONT(Graphics2D g2){
         g2.setFont(Square.FONT);
         g2.drawString(" ", 0, 0);
     }
