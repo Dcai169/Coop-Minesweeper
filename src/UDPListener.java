@@ -1,3 +1,4 @@
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
@@ -18,6 +19,7 @@ public class UDPListener extends Thread{
         } catch (Exception e){
             e.printStackTrace();
         }
+        setupPropertyChangeListener();
         this.data = null;
     }
 
@@ -56,5 +58,35 @@ public class UDPListener extends Thread{
 
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         this.pcs.removePropertyChangeListener(listener);
+    }
+
+    public void setupPropertyChangeListener() {
+        addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+                System.out.println(propertyChangeEvent.getPropertyName()+" modified");
+                System.out.println("Old: "+propertyChangeEvent.getOldValue());
+                System.out.println("New: "+propertyChangeEvent.getNewValue());
+                String data = Settings.LISTENER.getData();
+
+//                System.out.println("====[Minesweeper.propertyChange]====");
+//                System.out.println(EncodedObject.getHeader(data));
+//                System.out.println(EncodedObject.getBody(data));
+//                System.out.println();
+
+                if (data.contains("Action")){
+                    System.out.println("Action Object Detected");
+                    System.out.println(EncodedObject.constructAction(EncodedObject.getBody(data)));
+                } else if (data.contains("Board")){
+                    System.out.println("Board Object Detected");
+                    System.out.println(EncodedObject.constructBoard(data));
+                } else {
+                    System.out.println("====[Minesweeper.propertyChange]====");
+                    System.out.println(EncodedObject.getHeader(data));
+                    System.out.println(EncodedObject.getBody(data));
+                    System.out.println();
+                }
+            }
+        });
     }
 }

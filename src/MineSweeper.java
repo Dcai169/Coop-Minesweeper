@@ -33,7 +33,7 @@ public class MineSweeper extends JPanel {
         localActions.getListener().start();
         setupMouseListener();
         setupKeyboardListener();
-        setupPropertyChangeListener();
+//        setupPropertyChangeListener();
     }
 
     @Override
@@ -155,13 +155,15 @@ public class MineSweeper extends JPanel {
     }
 
     public void setupPropertyChangeListener() {
-        Settings.LISTENER.addPropertyChangeListener(new PropertyChangeListener() {
+        addPropertyChangeListener(new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-                System.out.println(propertyChangeEvent.getPropertyName()+" CHANGED");
+                System.out.println(propertyChangeEvent.getPropertyName()+" modified");
+                System.out.println("Old: "+propertyChangeEvent.getOldValue());
+                System.out.println("New: "+propertyChangeEvent.getNewValue());
                 String data = Settings.LISTENER.getData();
 
-//                System.out.println("====[Minesweeper.notifyOfThreadComplete]====");
+//                System.out.println("====[Minesweeper.propertyChange]====");
 //                System.out.println(EncodedObject.getHeader(data));
 //                System.out.println(EncodedObject.getBody(data));
 //                System.out.println();
@@ -173,7 +175,7 @@ public class MineSweeper extends JPanel {
                     System.out.println("Board Object Detected");
                     setBoardFromString(EncodedObject.getBody(data));
                 } else {
-                    System.out.println("====[Minesweeper.notifyOfThreadComplete]====");
+                    System.out.println("====[Minesweeper.propertyChange]====");
                     System.out.println(EncodedObject.getHeader(data));
                     System.out.println(EncodedObject.getBody(data));
                     System.out.println();
