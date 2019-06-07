@@ -241,14 +241,16 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
             revealBoard();
         }
         repaint();
+        Settings.LISTENER.doRun();
     }
 
     public void setBoardFromString(String toString){
-         board = EncodedObject.constructBoard(toString);
+        board = EncodedObject.constructBoard(toString);
+        System.out.println("board set");
     }
 
     public static void main(String[] args) {
-        JFrame window = new JFrame("Minesweeper");
+        JFrame window = new JFrame("Minesweeper: "+ClientSettings.NAME);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setBounds(0, 0, SIZE*Settings.WIDTH, SIZE*Settings.HEIGHT + 22); //(x, y, w, h) 22 due to title bar.
 
