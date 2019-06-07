@@ -12,7 +12,6 @@ public class Board implements ThreadCompleteListener {
         this.width = width;
         this.height = height;
         this.mines = new UDPArrayList<Mine>(Settings.LISTENER);
-        this.mines.getListener().addListener(this);
         generateBoard();
     }
 

@@ -1,8 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-public class MineSweeper extends JPanel implements ThreadCompleteListener{
+public class MineSweeper extends JPanel {
 
     private UDPArrayList<Action> localActions;
     private boolean gameState;
@@ -20,7 +22,7 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
         this.totalMines = Settings.TOTAL_MINES; //((width/SIZE)*(height/SIZE))/5;
         this.gameState = true;
         this.localActions = new UDPArrayList<Action>(Settings.LISTENER);
-        localActions.getListener().addListener(this);
+//        localActions.getListener().addListener(this);
         if (Settings.IS_SERVER) {
             this.board = new Board(width, height);
         } else {
@@ -31,12 +33,13 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
         localActions.getListener().start();
         setupMouseListener();
         setupKeyboardListener();
+        setupPropertyChangeListener();
     }
 
     @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
-        board.loadFont(g2);
+        Board.LOAD_FONT(g2);
         for (int r = 0; r < board.getBoard().length; r++) {
             for (int c = 0; c < board.getBoard()[0].length; c++) {
                 board.getBoard()[r][c].draw(g2, gameState);
@@ -151,6 +154,34 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
         });
     }
 
+    public void setupPropertyChangeListener() {
+        Settings.LISTENER.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+                System.out.println(propertyChangeEvent.getPropertyName()+" CHANGED");
+                String data = Settings.LISTENER.getData();
+
+//                System.out.println("====[Minesweeper.notifyOfThreadComplete]====");
+//                System.out.println(EncodedObject.getHeader(data));
+//                System.out.println(EncodedObject.getBody(data));
+//                System.out.println();
+
+                if (data.contains("Action")){
+                    System.out.println("Action Object Detected");
+                    executeAction(EncodedObject.constructAction(EncodedObject.getBody(data)));
+                } else if (data.contains("Board")){
+                    System.out.println("Board Object Detected");
+                    setBoardFromString(EncodedObject.getBody(data));
+                } else {
+                    System.out.println("====[Minesweeper.notifyOfThreadComplete]====");
+                    System.out.println(EncodedObject.getHeader(data));
+                    System.out.println(EncodedObject.getBody(data));
+                    System.out.println();
+                }
+            }
+        });
+    }
+
     public void drawWin(Graphics2D g2) {
         g2.setColor(Color.WHITE);
         g2.fillRect(width/8,height/6,width/5*4,height/3+SIZE/2);
@@ -210,28 +241,28 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
         return totalMines == correctFlags;
     }
 
-    @Override
-    public void notifyOfThreadComplete(Thread thread) {
-        String data = Settings.LISTENER.getData();
-
-//        System.out.println("====[Minesweeper.notifyOfThreadComplete]====");
-//        System.out.println(EncodedObject.getHeader(data));
-//        System.out.println(EncodedObject.getBody(data));
-//        System.out.println();
-
-        if (data.contains("Action")){
-            System.out.println("Action Object Detected");
-            executeAction(EncodedObject.constructAction(EncodedObject.getBody(data)));
-        } else if (data.contains("Board")){
-            System.out.println("Board Object Detected");
-            setBoardFromString(EncodedObject.getBody(data));
-        } else {
-            System.out.println("====[Minesweeper.notifyOfThreadComplete]====");
-            System.out.println(EncodedObject.getHeader(data));
-            System.out.println(EncodedObject.getBody(data));
-            System.out.println();
-        }
-    }
+//    @Override
+//    public void notifyOfThreadComplete(Thread thread) {
+//        String data = Settings.LISTENER.getData();
+//
+////        System.out.println("====[Minesweeper.notifyOfThreadComplete]====");
+////        System.out.println(EncodedObject.getHeader(data));
+////        System.out.println(EncodedObject.getBody(data));
+////        System.out.println();
+//
+//        if (data.contains("Action")){
+//            System.out.println("Action Object Detected");
+//            executeAction(EncodedObject.constructAction(EncodedObject.getBody(data)));
+//        } else if (data.contains("Board")){
+//            System.out.println("Board Object Detected");
+//            setBoardFromString(EncodedObject.getBody(data));
+//        } else {
+//            System.out.println("====[Minesweeper.notifyOfThreadComplete]====");
+//            System.out.println(EncodedObject.getHeader(data));
+//            System.out.println(EncodedObject.getBody(data));
+//            System.out.println();
+//        }
+//    }
 
     public void executeAction(Action action){
         String actionType = action.getType();
@@ -249,7 +280,6 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
             revealBoard();
         }
         repaint();
-        Settings.LISTENER.doRun();
     }
 
     public void setBoardFromString(String toString){
