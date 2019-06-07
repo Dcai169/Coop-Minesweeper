@@ -21,7 +21,6 @@ public abstract class NotifyingThread extends Thread {
             doRun();
         } finally {
             notifyListeners();
-            System.out.println(currentThread().getName()+" complete");
         }
     }
     public abstract void doRun();

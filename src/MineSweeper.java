@@ -25,7 +25,7 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
         } else {
             System.out.println("Waiting for Data");
             this.board = null;
-            Settings.LISTENER.doRun();
+            Settings.LISTENER.listen();
         }
         localActions.getListener().start();
         setupMouseListener();
@@ -220,10 +220,11 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
 
         if (data.contains("Action")){
             //TODO: pull apart packet & construct object
-            Action action = EncodedObject.constructAction(EncodedObject.getBody(data));
+
             System.out.println("====[Minesweeper.notifyOfThreadComplete]====");
-            System.out.println(action);
-            executeAction(action);
+            System.out.println(EncodedObject.constructAction(EncodedObject.getBody(data)));
+
+            executeAction(EncodedObject.constructAction(EncodedObject.getBody(data)));
         } else if (data.contains("Board")){
             setBoardFromString(EncodedObject.getBody(data));
         }
@@ -244,7 +245,6 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
         } else if (actionType.equals("reveal")){
             revealBoard();
         }
-        repaint();
     }
 
     public void setBoardFromString(String toString){
@@ -261,8 +261,8 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
 //        System.out.println(SIZE*Settings.HEIGHT);
 //        window.setSize(SIZE*Settings.WIDTH+16, SIZE*Settings.HEIGHT+39);
 
-//        window.setSize(SIZE*Settings.WIDTH, SIZE*Settings.HEIGHT+22); // MacOS
-        window.setSize(SIZE*Settings.WIDTH+6, SIZE*Settings.HEIGHT+29); //Win10
+        window.setSize(SIZE*Settings.WIDTH, SIZE*Settings.HEIGHT+22); // MacOS
+//        window.setSize(SIZE*Settings.WIDTH+6, SIZE*Settings.HEIGHT+29); //Win10
 
 
         panel.setFocusable(true);
