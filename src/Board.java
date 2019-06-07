@@ -19,6 +19,7 @@ public class Board implements ThreadCompleteListener {
         this.width = width;
         this.height = height;
         this.mines = mines;
+        setMines();
     }
 
     public void generateBoard() {
@@ -51,6 +52,25 @@ public class Board implements ThreadCompleteListener {
         }
         UDPTransmission newBoardTX = new UDPTransmission(Settings.TARGET_ADDRESS, Settings.PORT, EncodedObject.getPacket(Settings.NAME, this));
         newBoardTX.start();
+    }
+
+    public void setMines(){
+        board = new Square[height/SIZE][width/SIZE];
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                board[i][j] = new Square(i, j);
+            }
+        }
+
+        for (Mine m:mines) {
+            board[m.getR()][m.getC()] = m;
+        }
+
+        for (int k = 0; k < board.length; k++) {
+            for (int l = 0; l < board[0].length; l++) {
+                board[k][l].setNeighborMines(numNeighborMines(k, l));
+            }
+        }
     }
 
     public Square[][] getBoard() {
