@@ -25,4 +25,4 @@ hs_err_pid*
 .idea/*
 Minesweeper.iml
 out/*
-src/Name.java
+src/ClientSettings.java
