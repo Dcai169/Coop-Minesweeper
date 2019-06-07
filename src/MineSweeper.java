@@ -5,7 +5,7 @@ import java.awt.event.*;
 public class MineSweeper extends JPanel implements ThreadCompleteListener{
 
     private UDPArrayList<Action> localActions;
-    private boolean gameState;
+    private boolean gameState, isServer;
     private int width, height, totalMines;
     private int mX, mY;
     private int r, c;
@@ -13,14 +13,21 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
 
     public static final int SIZE = Settings.SIZE;
 
-    public MineSweeper(int width, int height) {
+    public MineSweeper(int width, int height, boolean isServer) {
         this.width = width;
         this.height = height;
         this.totalMines = Settings.TOTAL_MINES; //((width/SIZE)*(height/SIZE))/5;
         this.gameState = true;
         this.localActions = new UDPArrayList<Action>(Settings.LISTENER);
-//        localActions.getListener().addListener(this);
-        this.board = new Board(width, height);
+        localActions.getListener().addListener(this);
+        this.isServer = isServer;
+        if (isServer) {
+            this.board = new Board(width, height);
+        } else {
+            System.out.println("Waiting for Data");
+            this.board = null;
+            Settings.LISTENER.listen();
+        }
         localActions.getListener().start();
         setupMouseListener();
         setupKeyboardListener();
@@ -208,7 +215,9 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
         String data = Settings.LISTENER.getData();
         if (data.contains("Action")){
             //TODO: pull apart packet & construct object
-
+            executeAction(EncodedObject.constructAction(EncodedObject.getBodyString(data)));
+        } else if (data.contains("Board")){
+            overrideBoard(EncodedObject.getBodyString(data));
         }
     }
 
@@ -230,7 +239,7 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
     }
 
     public void overrideBoard(String toString){
-        board = EncodedObject.constructBoard(toString);
+         board = EncodedObject.constructBoard(toString);
     }
 
     public static void main(String[] args) {
@@ -238,7 +247,7 @@ public class MineSweeper extends JPanel implements ThreadCompleteListener{
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setBounds(0, 0, SIZE*Settings.WIDTH, SIZE*Settings.HEIGHT + 22); //(x, y, w, h) 22 due to title bar.
 
-        MineSweeper panel = new MineSweeper(SIZE*Settings.WIDTH, SIZE*Settings.HEIGHT);
+        MineSweeper panel = new MineSweeper(SIZE*Settings.WIDTH, SIZE*Settings.HEIGHT, true);
 //        System.out.println(SIZE*Settings.WIDTH);
 //        System.out.println(SIZE*Settings.HEIGHT);
 //        window.setSize(SIZE*Settings.WIDTH+16, SIZE*Settings.HEIGHT+39);
