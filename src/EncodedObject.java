@@ -28,15 +28,12 @@ public class EncodedObject {
             toString = toString.substring(toString.indexOf(";")+1);
             if ("r".equals(key)) {
                 r = Integer.parseInt(value);
-                break;
             } else if ("c".equals(key)) {
                 c = Integer.parseInt(value);
-                break;
             } else if ("type".equals(key)) {
                 type = value;
-                break;
             } else {
-                break;
+                System.out.println("Unrecognized key: "+key);
             }
         }
         //TODO: Add check if r, c is -1
@@ -144,26 +141,5 @@ public class EncodedObject {
     public static String getBody(String packet){
 //        body = packet.substring(packet.indexOf("<b(")+"<b(".length(), packet.indexOf(")/b>"));
         return packet.substring(packet.indexOf("<b(")+"<b(".length(), packet.indexOf(")/b>"));
-    }
-
-    public void fillFields(String header, String body){
-        while (header.contains(":") && header.contains(";")){
-            String key = header.substring(0, header.indexOf(":"));
-            String value = header.substring(header.indexOf(":")+1, header.indexOf(";"));
-            header = header.substring(header.indexOf(";")+1);
-            if ("origin".equals(key)) {
-                origin = value;
-            } else if ("class".equals(key)) {
-                className = value;
-            } else {
-                System.out.println("Unrecognized key: "+key);
-            }
-        }
-
-        if (className.equals("Board")){
-            object = constructBoard(body);
-        } else if (className.equals("Action")){
-            object = constructAction(body);
-        }
     }
 }
