@@ -18,17 +18,16 @@ public class UDPListener extends NotifyingThread{
         this.data = null;
     }
 
-    public String listen() {
+    public void listen() {
         try {
-            while (data == null) {
+            System.out.println("Listening for Data");
+            while (true) { //data == null
                 socket.receive(packet);
                 data = new java.lang.String((packet.getData())).trim();
                 System.out.println("RECEIVE:"+data);
             }
-            return data;
         } catch (Exception e){
             e.printStackTrace();
-            return e.getMessage();
         }
     }
 
@@ -38,6 +37,9 @@ public class UDPListener extends NotifyingThread{
     }
 
     public String getData() {
+//        String temp = data;
+//        data = null;
+//        return temp;
         return data;
     }
 }

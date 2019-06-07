@@ -87,6 +87,7 @@ public class Board implements ThreadCompleteListener {
     }
 
     public void lClick(int r, int c) {
+//        System.out.println("recursiveReveal("+r+", "+c+")");
         recursiveReveal(r, c);
 //        flaggedReveal();
     }
