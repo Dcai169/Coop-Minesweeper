@@ -1,7 +1,7 @@
 public class Settings extends ClientSettings{
-    public static final int TOTAL_MINES = 75;
-    public static final int WIDTH = 20;
-    public static final int HEIGHT = 16;
+    public static final int WIDTH = 16;
+    public static final int HEIGHT = 9;
+    public static final int TOTAL_MINES = (WIDTH*HEIGHT)/8;
     public static final int SIZE = 50;
     public static final String LOCALHOST = "127.0.0.1";
     public static final int PORT = 5005;
