@@ -17,6 +17,8 @@ To play Co-op,
 * `INCOMING_ADDRESS` must be set to your IP address.
 * There must be exactly one server and one client.
 * Your `NAME` must not be the same as your partners.
+* If you are playing with a large board, it may be necessary 
+to increase the size of the byte array `buffer` in the `UDPListener` class
 
 #### Known Bugs:
 * Actions `reveal`, `hide`, and `newGame` are not reflected by the partner.
