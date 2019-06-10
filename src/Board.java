@@ -4,18 +4,18 @@ import java.util.ArrayList;
 public class Board implements ThreadCompleteListener {
     private int width, height;
     private Square[][] board;
-    private UDPArrayList<Mine> mines;
+    private ArrayList<Mine> mines;
     public static final int SIZE = Settings.SIZE;
     public static final int TOTAL_MINES = Settings.TOTAL_MINES;
 
     public Board(int width, int height) {
         this.width = width;
         this.height = height;
-        this.mines = new UDPArrayList<Mine>(Settings.LISTENER);
+        this.mines = new ArrayList<Mine>();
         generateBoard();
     }
 
-    public Board(int width, int height, UDPArrayList<Mine> mines) {
+    public Board(int width, int height, ArrayList<Mine> mines) {
         this.width = width;
         this.height = height;
         this.mines = mines;
@@ -40,7 +40,7 @@ public class Board implements ThreadCompleteListener {
                 Mine mine = new Mine(randR, randC);
                 board[randR][randC] = mine;
                 board[randR][randC].setMine(true);
-                mines.localAdd(mine);
+                mines.add(mine);
                 minesPlanted++;
             }
         }

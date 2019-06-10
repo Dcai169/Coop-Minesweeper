@@ -81,11 +81,11 @@ public class EncodedObject {
         return parsedList;
     }
 
-    public static UDPArrayList<Mine> constructMineList(String toString){
+    public static ArrayList<Mine> constructMineList(String toString){
         ArrayList<String> encodedMines = contructList(toString);
-        UDPArrayList<Mine> mines = new UDPArrayList<Mine>(Settings.VOID_LISTENER);
+        ArrayList<Mine> mines = new ArrayList<Mine>();
         for (String encodedMine : encodedMines) {
-            mines.localAdd(constructMine(encodedMine));
+            mines.add(constructMine(encodedMine));
         }
         return mines;
     }
@@ -93,7 +93,7 @@ public class EncodedObject {
     public static Board constructBoard(String toString){
         int width = -1;
         int height = -1;
-        UDPArrayList<Mine> mines = null;
+        ArrayList<Mine> mines = null;
         while (toString.contains(":") && toString.contains(";")){
             String key = toString.substring(0, toString.indexOf(":"));
             String value = toString.substring(toString.indexOf(":")+1, toString.indexOf(";"));
@@ -137,7 +137,6 @@ public class EncodedObject {
 
     public static String getBody(String packet){
 //        body = packet.substring(packet.indexOf("<b(")+"<b(".length(), packet.indexOf(")/b>"));
-        System.out.println(packet.indexOf("<b(")+"<b(".length());
         return packet.substring(packet.indexOf("<b(")+"<b(".length(), packet.indexOf(")/b>"));
     }
 }
