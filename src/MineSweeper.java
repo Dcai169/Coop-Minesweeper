@@ -4,7 +4,7 @@ import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-public class MineSweeper extends JPanel {
+public class MineSweeper extends JPanel{
 
     private UDPArrayList<Action> localActions;
     private boolean gameState;
@@ -12,6 +12,7 @@ public class MineSweeper extends JPanel {
     private int mX, mY;
     private int r, c;
     private Board board;
+    private Timer timer;
 
     public static final int SIZE = Settings.SIZE;
 
@@ -23,17 +24,22 @@ public class MineSweeper extends JPanel {
         this.gameState = true;
         this.localActions = new UDPArrayList<Action>(Settings.LISTENER);
 //        localActions.getListener().addListener(this);
+
+        this.timer = setupTimer();
+        this.timer.start();
+
         if (Settings.IS_SERVER) {
             this.board = new Board(width, height);
         } else {
             System.out.println("Waiting for Server");
             this.board = null;
-            Settings.LISTENER.listen();
+            if (Settings.LISTENER.listen(true)){
+                System.out.println(Settings.LISTENER.getData());
+            }
         }
         localActions.getListener().start();
         setupMouseListener();
         setupKeyboardListener();
-//        setupPropertyChangeListener();
     }
 
     @Override
@@ -154,36 +160,6 @@ public class MineSweeper extends JPanel {
         });
     }
 
-    public void setupPropertyChangeListener() {
-        addPropertyChangeListener(new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-                System.out.println(propertyChangeEvent.getPropertyName()+" modified");
-                System.out.println("Old: "+propertyChangeEvent.getOldValue());
-                System.out.println("New: "+propertyChangeEvent.getNewValue());
-                String data = Settings.LISTENER.getData();
-
-//                System.out.println("====[Minesweeper.propertyChange]====");
-//                System.out.println(EncodedObject.getHeader(data));
-//                System.out.println(EncodedObject.getBody(data));
-//                System.out.println();
-
-                if (data.contains("Action")){
-                    System.out.println("Action Object Detected");
-                    executeAction(EncodedObject.constructAction(EncodedObject.getBody(data)));
-                } else if (data.contains("Board")){
-                    System.out.println("Board Object Detected");
-                    setBoardFromString(EncodedObject.getBody(data));
-                } else {
-                    System.out.println("====[Minesweeper.propertyChange]====");
-                    System.out.println(EncodedObject.getHeader(data));
-                    System.out.println(EncodedObject.getBody(data));
-                    System.out.println();
-                }
-            }
-        });
-    }
-
     public void drawWin(Graphics2D g2) {
         g2.setColor(Color.WHITE);
         g2.fillRect(width/8,height/6,width/5*4,height/3+SIZE/2);
@@ -243,7 +219,38 @@ public class MineSweeper extends JPanel {
         return totalMines == correctFlags;
     }
 
-//    @Override
+    public Timer setupTimer(){
+        return new Timer(1000 / 25, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (Settings.LISTENER.isModified()){
+
+                    String data = Settings.LISTENER.getData();
+                    System.out.println("====[MineSweeper.actionPerformed]====");
+                    System.out.println(EncodedObject.getHeader(data));
+                    System.out.println(EncodedObject.getBody(data));
+                    System.out.println();
+
+                    if (data.contains("Action")){
+                        System.out.println("Action Object Detected");
+                        executeAction(EncodedObject.constructAction(EncodedObject.getBody(data)));
+                    } else if (data.contains("Board")){
+                        System.out.println("Board Object Detected");
+                        board = EncodedObject.constructBoard(EncodedObject.getBody(data));
+                    } else {
+//                        System.out.println("====[MineSweeper.actionPerformed]====");
+//                        System.out.println(EncodedObject.getHeader(data));
+//                        System.out.println(EncodedObject.getBody(data));
+//                        System.out.println();
+                    }
+
+                    Settings.LISTENER.setModified(false);
+                }
+            }
+        });
+    }
+
+    //    @Override
 //    public void notifyOfThreadComplete(Thread thread) {
 //        String data = Settings.LISTENER.getData();
 //

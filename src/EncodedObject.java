@@ -112,7 +112,10 @@ public class EncodedObject {
             } else if ("mines".equals(key)){
                 mines = constructMineList(value);
             } else {
-                System.out.println("Unrecognized key: "+key);
+                System.out.println("====[EncodedObject.constructBoard]====");
+                System.out.println("Unrecognized Key: "+key);
+                System.out.println("Unrecognized Value: "+value);
+                System.out.println();
             }
         }
         return new Board(width, height, mines);
