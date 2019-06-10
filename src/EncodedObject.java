@@ -99,12 +99,6 @@ public class EncodedObject {
             String value = toString.substring(toString.indexOf(":")+1, toString.indexOf(";"));
             toString = toString.substring(toString.indexOf(";")+1);
 
-//            System.out.println("====[EncodedObject.constructBoard]====");
-//            System.out.println(key);
-//            System.out.println(value);
-//            System.out.println(toString);
-//            System.out.println();
-
             if ("width".equals(key)) {
                 width = Integer.parseInt(value);
             } else if ("height".equals(key)) {
@@ -143,6 +137,7 @@ public class EncodedObject {
 
     public static String getBody(String packet){
 //        body = packet.substring(packet.indexOf("<b(")+"<b(".length(), packet.indexOf(")/b>"));
+        System.out.println(packet.indexOf("<b(")+"<b(".length());
         return packet.substring(packet.indexOf("<b(")+"<b(".length(), packet.indexOf(")/b>"));
     }
 }
