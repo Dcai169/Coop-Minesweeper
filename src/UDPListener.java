@@ -12,7 +12,7 @@ public class UDPListener extends Thread{
         try {
             socket = new DatagramSocket(port, InetAddress.getByName(ip));
             socket.setBroadcast(true);
-            byte[] buffer = new byte[512];
+            byte[] buffer = new byte[1024];
             packet = new DatagramPacket(buffer, buffer.length);
         } catch (Exception e){
             e.printStackTrace();
