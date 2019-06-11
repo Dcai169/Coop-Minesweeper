@@ -214,7 +214,7 @@ public class MineSweeper extends JPanel{
     }
 
     public Timer setupTimer(){
-        return new Timer(1000 / 25, new ActionListener() {
+        return new Timer(1000 / 20, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if (Settings.LISTENER.isModified()){
