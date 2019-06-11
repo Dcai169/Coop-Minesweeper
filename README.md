@@ -11,6 +11,7 @@ Minesweeper
 
 #### Settings:
 Requires Java SE 6
+
 Game Parameters are customizable in Settings.java
 
 To play Co-op,
