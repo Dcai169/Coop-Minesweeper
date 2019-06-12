@@ -26,3 +26,4 @@ hs_err_pid*
 Minesweeper.iml
 out/*
 
+src/.vscode/launch.json
